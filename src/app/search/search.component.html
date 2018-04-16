@@ -1,0 +1,14 @@
+<div infiniteScroll
+     [infiniteScrollDistance]="0.01"
+     [infiniteScrollThrottle]="1000"
+     (scrolled)="extendList()" class="container" style="height: auto;">
+    <script src="/node_modules/howler/dist/howler.js"></script>
+    <input #search type="text" placeholder="Song name..."><button (click)="startSearch(search.value)"  type="button" class="btn btn-primary">Search</button>
+    <hr>
+    <button class="btn btn-primary" (click)="stop()">Pause</button>
+    <h4>Playing now: <span style="color: red">{{ playing }}</span></h4>
+    <div
+         *ngFor="let track of response" class="row" >
+        <button (click)="createPlayer(track.url, track.title)">Play</button><p><a href="{{ track.url }}">{{ track.title }}</a> - {{ track.origin }}</p>
+    </div>
+</div>

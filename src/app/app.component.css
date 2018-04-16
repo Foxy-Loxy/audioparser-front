@@ -1,0 +1,33 @@
+.head {
+    background: darkorange;
+}
+
+ul.menu {
+    list-style: none;
+    display: flex;
+    text-align: center;
+    background: #ffffff;
+    justify-content: space-between;
+    padding-left: 0;
+    border-bottom: #e0e0e0 1px solid
+}
+
+ul.menu > li a:any-link {
+    margin: 0.5em 0.5em 0.5em 0.5em;
+    display: block;
+    font-size: 30px;
+    color: inherit;
+    text-align: center;
+    text-decoration: none;
+}
+
+ul.menu > li.logo {
+    display: block;
+    text-align: center;
+}
+
+ul.menu > li.logo > a {
+    color: #FF5722;
+    font-size: 40px;
+}
+
