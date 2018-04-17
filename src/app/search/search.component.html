@@ -1,14 +1,46 @@
-<div infiniteScroll
-     [infiniteScrollDistance]="0.01"
-     [infiniteScrollThrottle]="1000"
-     (scrolled)="extendList()" class="container" style="height: auto;">
+<div>
     <script src="/node_modules/howler/dist/howler.js"></script>
-    <input #search type="text" placeholder="Song name..."><button (click)="startSearch(search.value)"  type="button" class="btn btn-primary">Search</button>
-    <hr>
-    <button class="btn btn-primary" (click)="stop()">Pause</button>
-    <h4>Playing now: <span style="color: red">{{ playing }}</span></h4>
-    <div
-         *ngFor="let track of response" class="row" >
-        <button (click)="createPlayer(track.url, track.title)">Play</button><p><a href="{{ track.url }}">{{ track.title }}</a> - {{ track.origin }}</p>
-    </div>
+    <mat-form-field>
+        <input #search placeholder="Song name..." matInput>
+    </mat-form-field>
+    <button mat-button  (click)="startSearch(search.value)"  type="button" class="btn btn-primary">Search</button>
+    <app-player #player [trackDuration]="'--:--'" [urlString]="''" [trackName]="'-'"></app-player>
+</div>
+
+<button mat-button (click)="table.renderRows()">Refresh</button>
+
+<div infiniteScroll
+     [infiniteScrollDistance]="2"
+     [infiniteScrollThrottle]="30"
+     (scrolled)="extendList()"
+        class="example-container mat-elevation-z8">
+    <mat-table #table [dataSource]="response">
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="url">
+            <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+            <mat-cell *matCellDef="let element"><button class="mat-elevation-z0" color="primary" mat-button mat-mini-fab (click)="selectTrack(player, element.url, element.title, element.duration)"><i class="material-icons">play_arrow</i></button></mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="title">
+            <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.title}} </mat-cell>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="duration">
+            <mat-header-cell *matHeaderCellDef> Duration </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{ timeToStr(element.duration) }} </mat-cell>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="origin">
+            <mat-header-cell *matHeaderCellDef> Origin </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.origin}} </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
 </div>

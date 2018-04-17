@@ -1,17 +1,14 @@
-<div class="container header">
-    <ul class="menu">
-        <li>
-            <a routerLink="" routerLinkActive="link-active">Home</a>
-        </li>
-        <li class="logo">
-            <a routerLink="">Audio <span style="color: #767676">Parser</span></a>
-        </li>
-        <li>
-            <a routerLink="search" routerLinkActive="link-active">Search</a>
-        </li>
-    </ul>
+
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <span class="logo">Audio Parser</span>
+        <span class="example-spacer"></span>
+        <button mat-button (click)="redirect('search')">Search</button>
+        <button mat-button (click)="redirect('')">Home</button>
+    </mat-toolbar-row>
+</mat-toolbar>
+
+<div class="container">
+    <router-outlet></router-outlet>
 </div>
-
-
-<router-outlet></router-outlet>
 

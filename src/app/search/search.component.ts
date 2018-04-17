@@ -2,7 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {trigger, style, transition, animate, keyframes, query, stagger} from '@angular/animations';
 import { InfiniteScrollModule } from "ngx-infinite-scroll";
 import { HttpClient } from '@angular/common/http';
-import { Howl } from "howler";
+import 'rxjs/add/operator/map'
+import {log} from "util";
 
 @Component({
     selector: 'app-search',
@@ -14,40 +15,29 @@ import { Howl } from "howler";
 export class SearchComponent implements OnInit {
 
     response: any;
-    sound: any;
-    url: string = '';
     search: string;
     page: number = 0;
-    playing: string = '-';
+    displayedColumns = ['url', 'title', 'duration', 'origin'];
+    dataSource: Element[];
 
     ngOnInit() {
-        this.sound = new Howl({
-            src: [this.url],
-            html5: true,
-            format: ['mp3', 'aac']
-        })
+
     }
 
     startSearch(stringGiven){
         this.search = stringGiven;
         this.http.get('http://127.0.0.1:8000/api/getList?search=' + this.search).subscribe(data => {
             this.response = data;
+            this.response = Array.from(this.response);
         });
     }
 
-    createPlayer(url, name) {
-        this.sound.stop();
-        this.url = url;
-        this.sound.unload();
-        this.sound._src = new Array(this.url);
-        this.sound.load();
-        this.sound.play();
-        this.playing = name;
+    selectTrack(player, url, title, duration){
+        player.setTrack(url, duration, title);
     }
 
-    stop() {
-        this.sound.stop();
-        this.playing = '-';
+    timeToStr(time){
+        return new Date(time * 1000).toISOString().substr(14, 5);
     }
 
     extendList() {

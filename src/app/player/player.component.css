@@ -1,0 +1,15 @@
+.player-container{
+    background: white;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 999999;
+    width: 100%;
+}
+
+.timeline {
+    width: 100%;
+    margin: 0;
+    left: 0;
+    top: 0;
+}

@@ -1,0 +1,7 @@
+<div class="player-container mat-elevation-z8">
+    <mat-slider #timeline class="timeline" (click)="changeTime(timeline)" min="0" max="{{ this.howler._duration }}" step="0.1" [value]="position"></mat-slider>
+    <p>{{ this.timeStr }} | {{ this.durationStr }}</p>
+    <button #play mat-fab (click)="playpause(play)"><i class="material-icons">{{ this.icon }}</i></button>
+    <button mat-button (click)="qwe()">Time</button>
+    <!--<p>{{  }}</p>-->
+</div>

@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {trigger, style, transition, animate, keyframes, query, stagger, state} from '@angular/animations';
+import { Routes, RouterModule, Router } from '@angular/router';
 
 
 @Component({
@@ -17,7 +18,11 @@ export class AppComponent {
 
     }
 
-    constructor() {
+    redirect(path){
+        this.router.navigate([path]);
+    }
+
+    constructor(private     router: Router) {
 
     }
 
