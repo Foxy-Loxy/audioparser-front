@@ -24,6 +24,10 @@ export class SearchComponent implements OnInit {
 
     }
 
+    download(url){
+        window.open(url, "_blank");
+    }
+
     startSearch(stringGiven){
         this.search = stringGiven;
         this.http.get('http://127.0.0.1:8000/api/getList?search=' + this.search).subscribe(data => {

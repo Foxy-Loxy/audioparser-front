@@ -19,7 +19,7 @@
         <!-- Position Column -->
         <ng-container matColumnDef="url">
             <mat-header-cell *matHeaderCellDef> </mat-header-cell>
-            <mat-cell *matCellDef="let element"><button class="mat-elevation-z0" color="primary" mat-button mat-mini-fab (click)="selectTrack(player, element.url, element.title, element.duration)"><i class="material-icons">play_arrow</i></button></mat-cell>
+            <mat-cell *matCellDef="let element"><button class="mat-elevation-z0" color="primary" mat-button mat-mini-fab (click)="selectTrack(player, element.url, element.title, element.duration)"><i class="material-icons">play_arrow</i></button><button mat-mini-fab class="mat-elevation-z0" color="primary" (click)="download(element.url)"><i class="material-icons">file_download</i></button></mat-cell>
         </ng-container>
 
         <!-- Name Column -->

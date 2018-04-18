@@ -19,9 +19,26 @@ export class PlayerComponent implements OnInit {
     icon: string = 'play_arrow';
     timeStr: string = '--:--';
     durationStr: string = '--:--';
+    _isPlaying: boolean;
+    volume: number;
 
-    timeToStr(time){
-        return new Date(time * 1000).toISOString().substr(14, 5);
+    get isPlaying():boolean {
+        return this._isPlaying;
+    }
+    set isPlaying(state) {
+        if(state == true){
+            this._isPlaying = state;
+            this.icon = 'pause';
+        }
+        if(state == false){
+            this._isPlaying = state;
+            this.icon = 'play_arrow';
+        }
+    }
+
+
+    timeToStr(time) {
+        return new Date(Math.round(time) * 1000).toISOString().substr(14, 5);
     }
 
     constructor() {
@@ -31,43 +48,64 @@ export class PlayerComponent implements OnInit {
         this.howler = new Howl({
             src: [this.url],
             html5: true,
-            format: ['mp3', 'aac']
+            format: ['mp3', 'aac'],
+            volume: 0.5
         });
-        this.icon = 'pause';
+        this.isPlaying = false;
         var obj = this;
         this.howler.on('pause', function () {
             clearInterval(obj.intervalVar);
+            obj.isPlaying = false;
         });
         this.howler.on('play', function () {
-            console.log(obj);
+            obj.isPlaying = true;
             obj.intervalVar = setInterval(function () {
                 obj.position = obj.howler.seek();
+                //!!!!! WORKAROUND !!!!!
+                if (isNaN(obj.position) && (!obj.isFloat(obj.position)))
+                    obj.position = 0;
+                //!!!!! WORKAROUND !!!!!
                 obj.timeStr = obj.timeToStr(obj.position);
                 console.log(obj.position);
-            }, 100);
+            }, 500);
+            // alert(obj.intervalVar);
         });
         this.howler.on('end', function () {
             clearInterval(obj.intervalVar);
             obj.position = 0;
+            obj.isPlaying = false;
         });
+        this.howler.on('load', function () {
+
+        })
     }
 
     changeTime(timeline) {
+        this.howler.stop();
         this.howler.seek(timeline.value);
+        this.howler.play();
+        this.isPlaying = true;
     }
 
 
     playpause(play) {
-        if (this.icon == 'play_arrow') {
-            this.howler.play();
-            this.icon = 'pause';
-        } else {
+        if (this.isPlaying == true) {
             this.howler.pause();
-            this.icon = 'play_arrow';
+            this.isPlaying = false;
+        }
+        else if (this.isPlaying == false) {
+            this.howler.play();
+            this.isPlaying = true;
         }
     }
 
+    isFloat(n) {
+        return n === +n && n !== (n|0);
+    }
+
     setTrack(url, duration, title) {
+        clearInterval(this.intervalVar);
+        this.position = 0;
         this.howler.stop();
         this.url = url;
         this.howler.unload();
@@ -75,13 +113,16 @@ export class PlayerComponent implements OnInit {
         this.howler.load();
         this.duration = duration;
         this.name = title;
+        this.timeStr = '--:--'
         this.durationStr = this.timeToStr(this.duration);
         this.howler.play();
-        console.log(this.howler);
+        this.isPlaying = true;
+
     }
 
-    qwe() {
-        console.log(this.howler._duration);
+    setVolume(slider){
+        this.howler.volume(slider.value);
     }
+
 
 }
