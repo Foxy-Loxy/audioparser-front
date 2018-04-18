@@ -9,7 +9,10 @@
             <p>Now playing: "<span style="color: #3F51B5">{{ this.name }}</span>"</p>
         </div>
         <div class=" right">
+            <button #prev mat-fab (click)="callPrev()"><i class="material-icons">skip_previous</i></button>
             <button #play mat-fab (click)="playpause(play)"><i class="material-icons">{{ this.icon }}</i></button>
+            <button #next mat-fab (click)="callNext()"><i class="material-icons">skip_next</i></button>
+            <button #loop mat-fab (click)="toggleLoop(loop)"><i class="material-icons">loop</i></button>
             <mat-slider #volume vertical class="sound" min="0" max="1" step="0.01" value="{{ this.howler.volume() }}"
                         (click)="setVolume(volume)"></mat-slider>
         </div>

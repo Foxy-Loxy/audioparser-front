@@ -11,6 +11,7 @@ import {AppRoutingModule} from './/app-routing.module';
 import {SearchComponent} from './search/search.component';
 import {PlayerComponent} from './player/player.component';
 import {MaterialModule} from './material/material.module';
+import {SearchAlertComponent} from "./search/search.component"
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import {MaterialModule} from './material/material.module';
         AppComponent,
         HomeComponent,
         SearchComponent,
-        PlayerComponent
+        PlayerComponent,
+        SearchAlertComponent
     ],
     imports: [
         BrowserModule,

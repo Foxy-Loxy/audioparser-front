@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 import {Howl} from "howler";
 
 
@@ -13,6 +13,11 @@ export class PlayerComponent implements OnInit {
     @Input('trackDuration') duration: number;
     @Input('trackName') name: string;
 
+    @Output() prevEvent = new EventEmitter<string>();
+    @Output() nextEvent = new EventEmitter<string>();
+    @Output() firstEvent = new EventEmitter<string>();
+
+
     howler: any;
     intervalVar: any;
     position: any;
@@ -21,6 +26,7 @@ export class PlayerComponent implements OnInit {
     durationStr: string = '--:--';
     _isPlaying: boolean;
     volume: number;
+    loop: boolean = false;
 
     get isPlaying():boolean {
         return this._isPlaying;
@@ -36,6 +42,13 @@ export class PlayerComponent implements OnInit {
         }
     }
 
+    callNext(){
+        this.nextEvent.next(this.url);
+    }
+
+    callPrev(){
+        this.prevEvent.next(this.url);
+    }
 
     timeToStr(time) {
         return new Date(Math.round(time) * 1000).toISOString().substr(14, 5);
@@ -66,14 +79,14 @@ export class PlayerComponent implements OnInit {
                     obj.position = 0;
                 //!!!!! WORKAROUND !!!!!
                 obj.timeStr = obj.timeToStr(obj.position);
-                console.log(obj.position);
             }, 500);
-            // alert(obj.intervalVar);
         });
         this.howler.on('end', function () {
             clearInterval(obj.intervalVar);
             obj.position = 0;
             obj.isPlaying = false;
+            if(obj.loop == false)
+                obj.callNext();
         });
         this.howler.on('load', function () {
 
@@ -87,15 +100,31 @@ export class PlayerComponent implements OnInit {
         this.isPlaying = true;
     }
 
+    toggleLoop(loopBtn){
+        if(this.loop == true) {
+            this.loop = false;
+            this.howler.loop(this.loop);
+            loopBtn.color = 'accent';
+        } else if(this.loop == false) {
+            this.loop = true;
+            this.howler.loop(this.loop);
+            loopBtn.color = 'primary';
+        }
+    }
+
 
     playpause(play) {
-        if (this.isPlaying == true) {
-            this.howler.pause();
-            this.isPlaying = false;
-        }
-        else if (this.isPlaying == false) {
-            this.howler.play();
-            this.isPlaying = true;
+        if(this.url == '') {
+            this.firstEvent.next();
+        } else {
+            if (this.isPlaying == true) {
+                this.howler.pause();
+                this.isPlaying = false;
+            }
+            else if (this.isPlaying == false) {
+                this.howler.play();
+                this.isPlaying = true;
+            }
         }
     }
 

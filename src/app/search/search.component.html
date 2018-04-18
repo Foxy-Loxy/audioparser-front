@@ -3,41 +3,46 @@
     <mat-form-field>
         <input #search placeholder="Song name..." matInput>
     </mat-form-field>
-    <button mat-button  (click)="startSearch(search.value)"  type="button" class="btn btn-primary">Search</button>
-    <app-player #player [trackDuration]="'--:--'" [urlString]="''" [trackName]="'-'"></app-player>
+    <button mat-button (click)="startSearch(search.value)" type="button" class="btn btn-primary">Search</button>
+    <app-player #player [trackDuration]="'--:--'" [urlString]="''" [trackName]="'-'" (nextEvent)="nextTrack($event)"
+                (prevEvent)="prevTrack($event)" (firstEvent)="firstTrack()" ></app-player>
 </div>
 
-<button mat-button (click)="table.renderRows()">Refresh</button>
+<button mat-button (click)="table.renderRows()">Refresh Table</button>
 
 <div infiniteScroll
      [infiniteScrollDistance]="2"
      [infiniteScrollThrottle]="30"
      (scrolled)="extendList()"
-        class="example-container mat-elevation-z8">
+     class="example-container mat-elevation-z8">
     <mat-table #table [dataSource]="response">
 
         <!-- Position Column -->
         <ng-container matColumnDef="url">
-            <mat-header-cell *matHeaderCellDef> </mat-header-cell>
-            <mat-cell *matCellDef="let element"><button class="mat-elevation-z0" color="primary" mat-button mat-mini-fab (click)="selectTrack(player, element.url, element.title, element.duration)"><i class="material-icons">play_arrow</i></button><button mat-mini-fab class="mat-elevation-z0" color="primary" (click)="download(element.url)"><i class="material-icons">file_download</i></button></mat-cell>
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell
+                    *matCellDef="let element">
+                <button class="mat-elevation-z0" color="primary" mat-button mat-mini-fab
+                        (click)="selectTrack(player, element.url, element.title, element.duration)"><i
+                        class="material-icons">play_arrow</i></button>
+                <button mat-mini-fab class="mat-elevation-z0" color="primary" (click)="download(element.url)"><i
+                        class="material-icons">file_download</i></button>
+            </mat-cell>
         </ng-container>
 
-        <!-- Name Column -->
         <ng-container matColumnDef="title">
-            <mat-header-cell *matHeaderCellDef> Title </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.title}} </mat-cell>
+            <mat-header-cell *matHeaderCellDef> Title</mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.title}}</mat-cell>
         </ng-container>
 
-        <!-- Weight Column -->
         <ng-container matColumnDef="duration">
-            <mat-header-cell *matHeaderCellDef> Duration </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{ timeToStr(element.duration) }} </mat-cell>
+            <mat-header-cell *matHeaderCellDef> Duration</mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{ timeToStr(element.duration) }}</mat-cell>
         </ng-container>
 
-        <!-- Weight Column -->
         <ng-container matColumnDef="origin">
-            <mat-header-cell *matHeaderCellDef> Origin </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.origin}} </mat-cell>
+            <mat-header-cell *matHeaderCellDef> Origin</mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.origin}}</mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
